@@ -179,23 +179,41 @@
     padding:0.6rem;
     box-shadow: 0 12px 30px -14px rgba(156,79,92,0.35);
   }
-  .photo-frame{
+  .photo-slider{
+    position:relative;
     width:100%;
-    aspect-ratio: 4/3;
     border-radius: calc(var(--radius-soft) - 8px);
     overflow:hidden;
     background: var(--blush);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
   }
-  .photo-frame img{
+  .photo-slides{
+    position:relative;
+    width:100%;
+    aspect-ratio: 4/3;
+    overflow:hidden;
+  }
+  .photo-slide{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.35s ease;
+  }
+  .photo-slide.is-active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .photo-slide img{
     width:100%; height:100%;
-    object-fit:cover;
+    object-fit:contain;
     display:block;
   }
   .photo-placeholder{
+    width:100%; height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
     text-align:center;
     color: var(--rose-deep);
     font-size:0.8rem;
@@ -203,8 +221,55 @@
     line-height:1.4;
   }
   .photo-placeholder svg{ width:34px; height:34px; margin-bottom:0.3rem; opacity:0.7; }
+  .photo-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:34px; height:34px;
+    border:none;
+    border-radius:50%;
+    background: rgba(255,255,255,0.82);
+    color: var(--rose-deep);
+    font-size:1.5rem;
+    line-height:1;
+    cursor:pointer;
+    box-shadow: 0 6px 12px rgba(74,44,58,0.12);
+    z-index:2;
+    transition: transform 0.15s ease, background 0.15s ease;
+    display:none;
+  }
+  .photo-arrow:hover{ background: rgba(255,255,255,0.95); }
+  .photo-arrow:active{ transform: translateY(-50%) scale(0.96); }
+  .photo-arrow.prev{ left:10px; }
+  .photo-arrow.next{ right:10px; }
+  .photo-indicators{
+    position:absolute;
+    left:50%;
+    bottom:12px;
+    transform:translateX(-50%);
+    display:flex;
+    gap:7px;
+    z-index:2;
+    padding:4px 8px;
+    border-radius:999px;
+    background: rgba(255,255,255,0.38);
+    backdrop-filter: blur(2px);
+  }
+  .photo-dot{
+    width:9px; height:9px;
+    border:none;
+    border-radius:50%;
+    background: rgba(74,44,58,0.35);
+    cursor:pointer;
+    padding:0;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .photo-dot.is-active{
+    background: var(--rose-deep);
+    transform: scale(1.15);
+  }
   .stop-label{
-    margin-top:0.55rem;
+    margin-top:0.85rem;
     font-family:'Playfair Display', serif;
     font-style:italic;
     color:var(--rose-deep);
@@ -468,12 +533,12 @@
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="petals" id="petals"></div>
-  <div class="hero-eyebrow">Hoy celebramos a</div>
+  <div class="hero-eyebrow">02/09/2026</div>
   <h1>
-    Feliz cumpleaños
+    Feliz cumpleaños mi amor
     <span class="thirty">30</span>
   </h1>
-  <p>Tres décadas de ser exactamente como eres. Baja despacio, esto es para ti.</p>
+  <p>3 décadas llevando luz a donde quiera que vaya, y 9 años siendo la luz de mi corazón</p>
   <div class="scroll-cue">
     <span>desliza hacia abajo</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m0 0l-6-6m6 6l6-6"/></svg>
@@ -484,8 +549,8 @@
 <section>
   <div class="container">
     <div class="section-head reveal">
-      <h2>Tu historia hasta hoy</h2>
-      <p>Cinco momentos, treinta años, una sola persona increíble.</p>
+      <h2>Su historia hasta hoy</h2>
+      <p>Cinco etapas, una mujer increíble.</p>
     </div>
 
     <div class="timeline">
@@ -493,12 +558,29 @@
       <div class="stop reveal">
         <div>
           <div class="photo-card">
-            <div class="photo-frame">
-              <!-- FOTO 1: prueba con la URL que compartiste -->
-              <img src="https://scontent.foax1-1.fna.fbcdn.net/v/t1.6435-9/57155072_2259499264143447_8254821572615864320_n.jpg?stp=dst-jpg_tt6&cstp=mx1080x1920&ctp=s1080x1920&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=b8EBvLOETqIQ7kNvwHsn9Ef&_nc_oc=AdrfZpZDSyYtqD_8KKfalfIinGF07j_dQeoDf_ghLusewwYmX6YRL1Z3DzKy7lkzx1s&_nc_zt=23&_nc_ht=scontent.foax1-1.fna&_nc_gid=k1GKNDye7XOLE9O98hf6yw&_nc_ss=7b2a8&oh=00_AQKQMkE5DXTxopEDXLr3dXp1hcZH5HD36vTPKJW45dEVpw&oe=6ABDB39C" alt="Bebé">
+            <div class="photo-slider" data-carousel>
+              <div class="photo-slides">
+                <div class="photo-slide is-active">
+                  <img src="pix/bebe/image00022.jpeg" alt="Bebé">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/bebe/image00021.jpeg" alt="Bebé">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/bebe/image00015.jpeg" alt="Bebé">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/bebe/image00023.jpeg" alt="Bebé">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/bebe/image00025.jpeg" alt="Bebé">
+                </div>
+              </div>
+              <button class="photo-arrow prev" type="button" aria-label="Anterior">&#8249;</button>
+              <button class="photo-arrow next" type="button" aria-label="Siguiente">&#8250;</button>
             </div>
           </div>
-          <div class="stop-label">La más pequeña de la casa</div>
+          <div class="stop-label">Nacieron los ojos más bonitos del mundo</div>
         </div>
       </div>
 
@@ -506,15 +588,29 @@
       <div class="stop reveal">
         <div>
           <div class="photo-card">
-            <div class="photo-frame">
-              <!-- FOTO 2: reemplaza por <img src="foto2.jpg" alt="Niña"> -->
-              <div class="photo-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
-                <div>Foto 2 · Niña</div>
+            <div class="photo-slider" data-carousel>
+              <div class="photo-slides">
+                <div class="photo-slide is-active">
+                  <img src="pix/nina/image00024.jpeg" alt="Niña">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/nina/image00017.jpeg" alt="Niña">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/nina/image00018.jpeg" alt="Niña">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/nina/image00019.jpeg" alt="Niña">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/nina/image00016.jpeg" alt="Niña">
+                </div>
               </div>
+              <button class="photo-arrow prev" type="button" aria-label="Anterior">&#8249;</button>
+              <button class="photo-arrow next" type="button" aria-label="Siguiente">&#8250;</button>
             </div>
           </div>
-          <div class="stop-label">Curiosa desde siempre</div>
+          <div class="stop-label">La sonrisa y el carisma que pone feliz a todos</div>
         </div>
       </div>
 
@@ -522,15 +618,29 @@
       <div class="stop reveal">
         <div>
           <div class="photo-card">
-            <div class="photo-frame">
-              <!-- FOTO 3: reemplaza por <img src="foto3.jpg" alt="Adolescente"> -->
-              <div class="photo-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
-                <div>Foto 3 · Adolescente</div>
+            <div class="photo-slider" data-carousel>
+              <div class="photo-slides">
+                <div class="photo-slide is-active">
+                  <img src="pix/adolescente/498294398_9719269441492290_88098560168407831_n.jpg" alt="Adolescente">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/adolescente/498295280_9719880341431200_8790674991877584585_n.jpg" alt="Adolescente">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/adolescente/512858997_24718004301133349_7118710217084197323_n.jpg" alt="Adolescente">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/adolescente/image00005.jpeg" alt="Adolescente">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/adolescente/495497932_9660965953989306_1951809558348333059_n.jpg" alt="Adolescente">
+                </div>
               </div>
+              <button class="photo-arrow prev" type="button" aria-label="Anterior">&#8249;</button>
+              <button class="photo-arrow next" type="button" aria-label="Siguiente">&#8250;</button>
             </div>
           </div>
-          <div class="stop-label">Encontrando su propia voz</div>
+          <div class="stop-label">Se formó la personalidad tan única que tiene</div>
         </div>
       </div>
 
@@ -538,15 +648,29 @@
       <div class="stop reveal">
         <div>
           <div class="photo-card">
-            <div class="photo-frame">
-              <!-- FOTO 4: reemplaza por <img src="foto4.jpg" alt="Veinteañera"> -->
-              <div class="photo-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
-                <div>Foto 4 · Veinteañera</div>
+            <div class="photo-slider" data-carousel>
+              <div class="photo-slides">
+                <div class="photo-slide is-active">
+                  <img src="pix/vinteanera/image00004.jpeg" alt="Veinteañera">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/vinteanera/image00001.jpeg" alt="Veinteañera">
+                </div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00002.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00002f.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00004f.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00005.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00007.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00008.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00011.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/image00012.jpeg" alt="Veinteañera"></div>
+                <div class="photo-slide"><img src="pix/vinteanera/515308811_24813250144942097_4299239730236960746_n.jpg" alt="Veinteañera"></div>
               </div>
+              <button class="photo-arrow prev" type="button" aria-label="Anterior">&#8249;</button>
+              <button class="photo-arrow next" type="button" aria-label="Siguiente">&#8250;</button>
             </div>
           </div>
-          <div class="stop-label">El mundo empezaba a abrirse</div>
+          <div class="stop-label">Se convirtió en la mujer que amo</div>
         </div>
       </div>
 
@@ -554,15 +678,29 @@
       <div class="stop reveal">
         <div>
           <div class="photo-card">
-            <div class="photo-frame">
-              <!-- FOTO 5: reemplaza por <img src="foto5.jpg" alt="Hoy, 30 años"> -->
-              <div class="photo-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
-                <div>Foto 5 · Hoy, 30</div>
+            <div class="photo-slider" data-carousel>
+              <div class="photo-slides">
+                <div class="photo-slide is-active">
+                  <img src="pix/treinta/image00009.jpeg" alt="Treinta años">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/treinta/image00008.jpeg" alt="Treinta años">
+                </div>
+                <div class="photo-slide">
+                  <img src="pix/treinta/image00010.jpeg" alt="Treinta años">
+                </div>
+                <div class="photo-slide"><img src="pix/treinta/image00012.jpeg" alt="Treinta años"></div>
+                <div class="photo-slide"><img src="pix/treinta/image00006.jpeg" alt="Treinta años"></div>
+                <div class="photo-slide"><img src="pix/treinta/image00029.jpeg" alt="Treinta años"></div>
+                <div class="photo-slide"><img src="pix/treinta/image00034.jpeg" alt="Treinta años"></div>
+                <div class="photo-slide"><img src="pix/treinta/image00036.jpeg" alt="Treinta años"></div>
+                <div class="photo-slide"><img src="pix/treinta/image00041.jpeg" alt="Treinta años"></div>
               </div>
+              <button class="photo-arrow prev" type="button" aria-label="Anterior">&#8249;</button>
+              <button class="photo-arrow next" type="button" aria-label="Siguiente">&#8250;</button>
             </div>
           </div>
-          <div class="stop-label">Justo quien tenía que ser</div>
+          <div class="stop-label">Y en la más valiente guerrera de diosito</div>
         </div>
       </div>
     </div>
@@ -573,7 +711,7 @@
 <section>
   <div class="container">
     <div class="section-head reveal">
-      <h2>Para ti</h2>
+      <h2>Para usted</h2>
     </div>
 
     <div class="envelope-stage reveal" id="envelopeStage">
@@ -584,19 +722,21 @@
         <div class="env-flap" id="envFlap"></div>
         <div class="env-seal">♥</div>
       </div>
-      <p class="envelope-hint" id="envelopeHint">Toca el sobre para abrirlo</p>
+      <p class="envelope-hint" id="envelopeHint">Toque el sobre</p>
     </div>
 
     <div class="letter-wrap" id="letterFull" hidden>
       <div class="letter-heart">♥</div>
-      <!-- ESCRIBE AQUÍ TU MENSAJE: reemplaza los párrafos de ejemplo por tu propio texto -->
       <div class="letter-body">
-        <p>Feliz cumpleaños, amorcito.</p>
-        <p>Hoy cumples 30, y quiero que sepas que para mí no eres una edad ni una fecha: eres la persona con la que quiero ver pasar todos los años que vengan.</p>
-        <p>Gracias por tu risa, por tu paciencia, por cómo haces que hasta un día cualquiera se sienta especial. Este es apenas el inicio de una década que quiero construir contigo, paso a paso.</p>
-        <p>Feliz cumpleaños, mi amor. Te amo más de lo que estas líneas pueden decir.</p>
+        <p>Hace 30 años nació la niña más bonita de la sabino</p>
+        <p>Hace 9 años conocí a la niña más increíble del mundo</p>
+        <p>Hoy esa mujercita está sentada a mi lado sonriendo al leer esta cartita :)</p>
+        <p>Viendo las fotos para hacer esto me puse a recordar todo lo que hemos pasado juntos, y sólo quería hacerle saber que estoy muy agradecido con la vida por la oportunidad que me ha dado de conocerla y estar a su lado.</p>
+        <p>Qué fortuna poder verla sonreír, pasar tantas locuras juntos, estar para usted cuando más lo necesita y sobre todo, qué fortuna poder llamarle novia.</p>
+        <p>Admiro mucho su fortaleza, su temple, y que siempre tiene la mejor cara aún cuando la situación es gris.</p>
+        <p>Feliz cumpleaños amorcito! La amo más de lo que estas líneas pueden decir y más de lo que a veces puedo expresar.</p>
+        <p>PD. Aunque siempre le hago coto con que ya está viejita, la verdad es que se sigue viendo en sus 20s miamo :3</p>
       </div>
-      <div class="letter-sign">— Tuyo, siempre</div>
     </div>
   </div>
 </section>
@@ -605,8 +745,8 @@
 <section class="game-section">
   <div class="container">
     <div class="section-head reveal">
-      <h2>Un juego para ti</h2>
-      <p>Salta los obstáculos y consigue el mejor puntaje posible.</p>
+      <h2>Un detalle para la princesa</h2>
+      <p>Salte los tubos, como el dino 🦖</p>
     </div>
 
     <div class="game-frame reveal">
@@ -625,9 +765,8 @@
 <!-- ============ CIERRE ============ -->
 <section class="closing">
   <div class="container reveal">
-    <h2>Que este nuevo año<br>te trate tan bien como te lo mereces</h2>
-    <button class="surprise-btn" id="surpriseBtn">✦ Una sorpresa más ✦</button>
-    <div class="signature">Hecho con cariño para tu día</div>
+    <h2>Que este nuevo año y década<br>sean mucho mejores que las anteriores<br><br>La amo ❤️</h2>
+    <button class="surprise-btn" id="surpriseBtn">Púchele aquí</button>
   </div>
 </section>
 
@@ -675,7 +814,7 @@
   function handleTap(){
     if(step === 0){
       envelope.classList.add('is-open');
-      hint.textContent = 'Toca otra vez para leer la carta';
+      hint.textContent = 'Toque otra vez :)';
       step = 1;
     } else if(step === 1){
       step = 2;
@@ -691,6 +830,65 @@
   envelope.addEventListener('click', handleTap);
   envelope.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); handleTap(); }
+  });
+})();
+
+/* ================= CARRUSEL DE FOTOS ================= */
+(function(){
+  const carousels = document.querySelectorAll('[data-carousel]');
+
+  carousels.forEach((carousel) => {
+    const slides = Array.from(carousel.querySelectorAll('.photo-slide'));
+    const prevBtn = carousel.querySelector('.photo-arrow.prev');
+    const nextBtn = carousel.querySelector('.photo-arrow.next');
+    if (!slides.length) return;
+
+    const indicatorsWrap = document.createElement('div');
+    indicatorsWrap.className = 'photo-indicators';
+
+    slides.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'photo-dot' + (index === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', `Ir a la foto ${index + 1}`);
+      dot.addEventListener('click', () => showSlide(index));
+      indicatorsWrap.appendChild(dot);
+    });
+
+    carousel.appendChild(indicatorsWrap);
+
+    let current = 0;
+    let touchStartX = 0;
+
+    carousel.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    }, {passive:true});
+
+    carousel.addEventListener('touchend', (event) => {
+      const touchEndX = event.changedTouches[0].screenX;
+      const distance = touchEndX - touchStartX;
+      if (Math.abs(distance) < 40) return;
+      showSlide(current + (distance < 0 ? 1 : -1));
+    }, {passive:true});
+
+    function showSlide(index){
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('is-active', i === current);
+      });
+      const dots = carousel.querySelectorAll('.photo-dot');
+      dots.forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+    }
+
+    if (slides.length <= 1) {
+      if (prevBtn) prevBtn.style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'none';
+      indicatorsWrap.style.display = 'none';
+      return;
+    }
+
+    prevBtn?.addEventListener('click', () => showSlide(current - 1));
+    nextBtn?.addEventListener('click', () => showSlide(current + 1));
   });
 })();
 
@@ -1011,12 +1209,12 @@
     ctx.textAlign = 'center';
     ctx.font = '600 22px Montserrat, sans-serif';
     if(state === 'idle'){
-      ctx.fillText('Toca para empezar a saltar', W/2, H/2);
+      ctx.fillText('Toque para empezar a jugar', W/2, H/2);
     } else if(state === 'over'){
       ctx.font = '600 24px Montserrat, sans-serif';
-      ctx.fillText('¡Perdiste! Puntaje: ' + score, W/2, H/2 - 10);
+      ctx.fillText('Puntaje: ' + score, W/2, H/2 - 10);
       ctx.font = '400 16px Montserrat, sans-serif';
-      ctx.fillText('Toca para reintentar', W/2, H/2 + 24);
+      ctx.fillText('Toque para reintentar', W/2, H/2 + 24);
     }
   }
 
